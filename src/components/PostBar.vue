@@ -30,7 +30,7 @@ import PostList from './PostList.vue';
 }
 
 .header {
-  max-width: 80%;
+  max-width: 100%;
   margin: 8px 8px;
 }
 
