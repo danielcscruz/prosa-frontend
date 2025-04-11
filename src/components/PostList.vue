@@ -1,121 +1,65 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import api from '../services/api.js'
+
+
+interface Post {
+  id: number;
+  name: string;
+  username: string;
+  content: string;
+  created_at: string;
+  likes: number;
+  user_avatar: string;
+  bookmark: number;
+}
+const posts = ref<Post[]>([])
+
+const fetchPosts = async () => {
+  try {
+    const response = await api.get<Post[]>('/api/posts')
+    posts.value = response.data
+  } catch (error) {
+    console.error("Erro ao buscar items: ", error)
+  }
+}
+onMounted(fetchPosts)
+
+
 </script>
 
 <template>
   <ul>
-    <li>
+    <li v-for="post in posts" :key="post.id">
       <div class="card">
         <div class="avatar-section">
-          <img src="@/assets/avatar.png" class="avatar-img" alt="like" />
+          <img :src=post.user_avatar class="avatar-img" alt="like" />
         </div>
         <div class="content">
           <div class="title">
-            <h3>Daniel Cruz</h3>
-            <h4>@danzinho</h4>
+            <h3>{{ post.name }}</h3>
+            <h4>{{ post.username }}</h4>
           </div>
           <div class="post">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.
-            Cras venenatis euismod.
+            {{ post.content }}
           </div>
+          <small>{{ post.created_at }}</small>
           <div class="actions">
-            <img src="@/assets/heart-green.png" class="icon-post" alt="like" />
-            <img src="@/assets/refresh-green.png" class="icon-post" alt="repost" />
-            <img src="@/assets/bookmark-green.png" class="icon-post" alt="bookmark" />
+            <div class="icon-set">
+              <img src="@/assets/heart-green.png" class="icon-post" alt="like" />
+              <!-- <span>{{ post.likes }}</span> -->
+            </div>
+            <div class="icon-set">
+              <img src="@/assets/bookmark-green.png" class="icon-post" alt="bookmark" />
+              <!-- <span>{{ post.bookmark }}</span> -->
+            </div>
+            <div class="icon-set">
+              <img src="@/assets/refresh-green.png" class="icon-post" alt="repost" />
+            </div>
           </div>
         </div>
       </div>
     </li>
-    <li>
-      <div class="card">
-        <div class="avatar-section">
-          <img src="@/assets/avatar.png" class="avatar-img" alt="like" />
-        </div>
-        <div class="content">
-          <div class="title">
-            <h3>Daniel Cruz</h3>
-            <h4>@danzinho</h4>
-          </div>
-          <div class="post">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.
-            Cras venenatis euismod.
-          </div>
-          <div class="actions">
-            <img src="@/assets/heart-green.png" class="icon-post" alt="like" />
-            <img src="@/assets/refresh-green.png" class="icon-post" alt="repost" />
-            <img src="@/assets/bookmark-green.png" class="icon-post" alt="bookmark" />
-          </div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="card">
-        <div class="avatar-section">
-          <img src="@/assets/avatar.png" class="avatar-img" alt="like" />
-        </div>
-        <div class="content">
-          <div class="title">
-            <h3>Daniel Cruz</h3>
-            <h4>@danzinho</h4>
-          </div>
-          <div class="post">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.
-            Cras venenatis euismod.
-          </div>
-          <div class="actions">
-            <img src="@/assets/heart-green.png" class="icon-post" alt="like" />
-            <img src="@/assets/refresh-green.png" class="icon-post" alt="repost" />
-            <img src="@/assets/bookmark-green.png" class="icon-post" alt="bookmark" />
-          </div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="card">
-        <div class="avatar-section">
-          <img src="@/assets/avatar.png" class="avatar-img" alt="like" />
-        </div>
-        <div class="content">
-          <div class="title">
-            <h3>Daniel Cruz</h3>
-            <h4>@danzinho</h4>
-          </div>
-          <div class="post">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.
-            Cras venenatis euismod.
-          </div>
-          <div class="actions">
-            <img src="@/assets/heart-green.png" class="icon-post" alt="like" />
-            <img src="@/assets/refresh-green.png" class="icon-post" alt="repost" />
-            <img src="@/assets/bookmark-green.png" class="icon-post" alt="bookmark" />
-          </div>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="card">
-        <div class="avatar-section">
-          <img src="@/assets/avatar.png" class="avatar-img" alt="like" />
-        </div>
-        <div class="content">
-          <div class="title">
-            <h3>Daniel Cruz</h3>
-            <h4>@danzinho</h4>
-          </div>
-          <div class="post">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.
-            Cras venenatis euismod.
-          </div>
-          <div class="actions">
-            <img src="@/assets/heart-green.png" class="icon-post" alt="like" />
-            <img src="@/assets/refresh-green.png" class="icon-post" alt="repost" />
-            <img src="@/assets/bookmark-green.png" class="icon-post" alt="bookmark" />
-          </div>
-        </div>
-      </div>
-    </li>
-
-
-
   </ul>
 </template>
 
@@ -162,13 +106,28 @@ ul {
 
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
 .post {
   padding-bottom: 8px;
 }
 
 .actions {
+  display: flex;
+  justify-content: flex-start;
+  /* Aligns everything to the left */
+  align-items: center;
   padding-top: 8px;
-  display: inline;
+  gap: 16px;
+}
+
+.icon-set {
+  display: flex;
+  align-items: center;
+  gap: 0px;
 }
 
 .icon-post {

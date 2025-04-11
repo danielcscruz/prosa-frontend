@@ -3,13 +3,15 @@
 import ProfileBar from './components/ProfileBar.vue';
 import PostBar from './components/PostBar.vue';
 import FeatBar from './components/FeatBar.vue';
+import DashboardView from './components/DashboardView.vue';
 </script>
 
 <template>
   <div class="wrapper ">
     <ProfileBar class="f-1 profile-bar" />
-    <PostBar class="f-2 border" />
-    <FeatBar class="f-1" />
+    <router-view></router-view>
+    <!-- <PostBar class="f-2 border" />
+    <FeatBar class="f-1" /> -->
   </div>
 </template>
 
