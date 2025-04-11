@@ -33,13 +33,14 @@
     <div class="feat-box">
       <h2>Quem Seguir</h2>
       <ul>
-
         <li>
           <div class="card-add-list">
-            <img src="@/assets/avatar.png" alt="user" class="avatar-feat" />
-            <div class="user-group">
-              <h3>Lorem Ipsum </h3>
-              <h4>@Lorinho</h4>
+            <div class="profile-feat">
+              <img src="@/assets/avatar.png" alt="user" class="avatar-feat" />
+              <div class="user-group">
+                <h3>Lorem Ipsum </h3>
+                <h4>@Lorinho</h4>
+              </div>
             </div>
             <div class="add-circle">
               <img src="@/assets/user-add.png" alt="" class="add-feat" />
@@ -48,10 +49,12 @@
         </li>
         <li>
           <div class="card-add-list">
-            <img src="@/assets/avatar.png" alt="user" class="avatar-feat" />
-            <div class="user-group">
-              <h3>Lorem Ipsum </h3>
-              <h4>@Lorinho</h4>
+            <div class="profile-feat">
+              <img src="@/assets/avatar.png" alt="user" class="avatar-feat" />
+              <div class="user-group">
+                <h3>Lorem Ipsum </h3>
+                <h4>@Lorinho</h4>
+              </div>
             </div>
             <div class="add-circle">
               <img src="@/assets/user-add.png" alt="" class="add-feat" />
@@ -60,10 +63,12 @@
         </li>
         <li>
           <div class="card-add-list">
-            <img src="@/assets/avatar.png" alt="user" class="avatar-feat" />
-            <div class="user-group">
-              <h3>Lorem Ipsum </h3>
-              <h4>@Lorinho</h4>
+            <div class="profile-feat">
+              <img src="@/assets/avatar.png" alt="user" class="avatar-feat" />
+              <div class="user-group">
+                <h3>Lorem Ipsum </h3>
+                <h4>@Lorinho</h4>
+              </div>
             </div>
             <div class="add-circle">
               <img src="@/assets/user-add.png" alt="" class="add-feat" />
@@ -80,12 +85,28 @@
 
 <style scoped>
 .card-add-list {
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   display: flex;
   align-items: center;
+  text-align: center;
   width: 100%;
   gap: 10px;
+
+}
+
+.profile-feat {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.profile-feat:hover {
+  background-color: var(--green-moss);
+
 }
 
 .avatar-feat {
@@ -97,11 +118,20 @@
 
 .user-group {
   display: flex;
+  padding: 8px;
   flex-direction: column;
-  /* Stack username and handle */
   align-items: flex-start;
-  /* Align text to left */
   justify-content: center;
+  line-height: 18px;
+  gap: 4px;
+}
+
+.user-group h3 {
+  font-size: 16px;
+}
+
+.user-group h4 {
+  font-size: 12px;
 }
 
 .add-circle {
@@ -112,11 +142,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+
 }
 
 .add-circle:hover {
-  cursor: pointer;
-  background-color: var(--green-moss);
+  transform: scale(1.5);
 }
 
 .add-feat {
@@ -142,8 +174,14 @@
 }
 
 .card-post-list {
+  padding-left: 4px;
+  border-radius: 8px;
   cursor: pointer;
   padding-top: 8px;
+}
+
+.card-post-list:hover {
+  background-color: var(--green-moss);
 
 }
 

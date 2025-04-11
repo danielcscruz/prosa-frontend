@@ -172,9 +172,18 @@ ul {
 }
 
 .icon-post {
-  height: 20px;
-  width: 20px;
+  height: 15px;
+  width: 15px;
   margin-right: 80px;
   cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+  /* Animação suave */
+
+}
+
+.icon-post:hover {
+  transform: scale(1.5);
+  /* Aumenta 20% */
+
 }
 </style>
