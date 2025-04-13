@@ -7,11 +7,10 @@ import PostList from './PostList.vue';
     <div class="header-image">
       <div class="card">
         <div class="avatar-container">
-          <img src="../assets/avatar.png" class="avatar-image" alt="">
         </div>
         <div class="details">
           <div>
-            <h2>Daniel Cruz</h2>
+            <h2>Buscar</h2>
             <h4>@danzinho</h4>
           </div>
           <div class="stats">

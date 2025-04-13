@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import PostBar from './PostBar.vue';
 import FeatBar from './FeatBar.vue';
 import ProfileBar from './MainBar.vue';
+import ExploreBar from './ExploreBar.vue';
 </script>
 
 <template>
   <ProfileBar class="f-1" />
-  <PostBar class="f-2 border" />
+  <ExploreBar class="f-2 border" />
   <FeatBar class="f-1" />
 </template>
 
