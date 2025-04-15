@@ -5,6 +5,19 @@ import { useRoute } from 'vue-router'
 import loader from '../assets/loader.gif'
 import { useAuthStore } from '@/stores/auth.js'
 
+import heartGreen from '@/assets/heart-green.png'
+import heartFilled from '@/assets/heart-filled.png'
+import bookmarkGreen from '@/assets/bookmark-green.png'
+import bookmarkFilled from '@/assets/bookmark-filled.png'
+import repostGreen from '@/assets/refresh-green.png'
+import respostFilled from '@/assets/refresh-filled.png'
+import trash from '@/assets/trash.png'
+import userAdd from '@/assets/user-add.png'
+import userTrust from '@/assets/user-trust.png'
+import userPen from '@/assets/user-pen.png'
+
+
+
 const isLoading = ref(true)
 const route = useRoute()
 const authStore = useAuthStore()
@@ -206,7 +219,7 @@ const deletePost = async (postId: number) => {
           <div class="post">
             <div v-if="post.repost">
               <div class="repost">
-                <img src="/src/assets/refresh-green.png" class="repost-icon" />
+                <img :src="repostGreen" class="repost-icon" />
                 <span class="repost-info">Repostado de @{{ post.repost.username }}</span>
               </div>
               <p>{{ post.repost.content }}</p>
@@ -220,19 +233,16 @@ const deletePost = async (postId: number) => {
 
           <div class="actions">
             <div class="icon-set" @click="toggleLike(post)">
-              <img class="icon-post" alt="like"
-                :src="post.is_liked ? '/src/assets/heart-filled.png' : '/src/assets/heart-green.png'" />
+              <img class="icon-post" alt="like" :src="post.is_liked ? heartFilled : heartGreen" />
             </div>
             <div class="icon-set" @click="toggleBookmark(post)">
-              <img class="icon-post" alt="bookmark"
-                :src="post.is_bookmarked ? '/src/assets/bookmark-filled.png' : '/src/assets/bookmark-green.png'" />
+              <img class="icon-post" alt="bookmark" :src="post.is_bookmarked ? bookmarkFilled : bookmarkGreen" />
             </div>
-            <div class="icon-set" @click="toggleRepost(post)">
-              <img class="icon-post repost" alt="repost"
-                :src="post.is_reposted ? '/src/assets/refresh-filled.png' : '/src/assets/refresh-green.png'" />
+            <div class=" icon-set" @click="toggleRepost(post)">
+              <img class="icon-post repost" alt="repost" :src="post.is_reposted ? respostFilled : repostGreen" />
             </div>
-            <div class="icon-set" v-if="post.username === authStore.user?.username" @click="deletePost(post.id)">
-              <img class="icon-post" alt="delete" src="/src/assets/trash.png" />
+            <div class=" icon-set" v-if="post.username === authStore.user?.username" @click="deletePost(post.id)">
+              <img class="icon-post" alt="delete" :src="trash" />
             </div>
           </div>
         </div>
