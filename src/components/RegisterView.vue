@@ -17,7 +17,7 @@ const register = async () => {
   }
 
   try {
-    const response = await fetch("http://localhost:8000/api/register/", {
+    const response = await fetch("https://prosa-app-31830595ff5b.herokuapp.com/api/register/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

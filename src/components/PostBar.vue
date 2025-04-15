@@ -23,7 +23,7 @@ const postContent = async () => {
     const token = authStore.accessToken
     console.log(id)
     const response = await api.post(
-      'http://localhost:8000/api/posts/',
+      'https://prosa-app-31830595ff5b.herokuapp.com/api/posts/',
       {
         content: text.value,
         user: id

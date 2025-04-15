@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8000/api/token/'
+const API_URL = 'https://prosa-app-31830595ff5b.herokuapp.com/api/token/'
 
 let isRefreshing = false
 let subscribers: ((token: string) => void)[] = []

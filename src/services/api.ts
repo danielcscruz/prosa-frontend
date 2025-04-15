@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 // import AuthService from './AuthService'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/',
+  baseURL: 'https://prosa-app-31830595ff5b.herokuapp.com/',
 })
 
 api.interceptors.response.use(

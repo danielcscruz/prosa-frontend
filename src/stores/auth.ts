@@ -54,7 +54,7 @@ export const useAuthStore = defineStore('auth', {
 
     async login(username: string, password: string) {
       try {
-        const response = await fetch('http://localhost:8000/api/token/', {
+        const response = await fetch('https://prosa-app-31830595ff5b.herokuapp.com/api/token/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
@@ -75,11 +75,14 @@ export const useAuthStore = defineStore('auth', {
 
     async refreshAccessToken() {
       try {
-        const response = await fetch('http://localhost:8000/api/token/refresh/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ refresh: this.refreshToken }),
-        })
+        const response = await fetch(
+          'https://prosa-app-31830595ff5b.herokuapp.com/api/token/refresh/',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh: this.refreshToken }),
+          },
+        )
 
         if (response.ok) {
           const data = await response.json()
@@ -96,7 +99,7 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUserData() {
       try {
-        const response = await fetch('http://localhost:8000/api/users/me/', {
+        const response = await fetch('https://prosa-app-31830595ff5b.herokuapp.com/api/users/me/', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
