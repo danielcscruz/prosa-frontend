@@ -12,9 +12,7 @@ import bookmarkFilled from '@/assets/bookmark-filled.png'
 import repostGreen from '@/assets/refresh-green.png'
 import respostFilled from '@/assets/refresh-filled.png'
 import trash from '@/assets/trash.png'
-import userAdd from '@/assets/user-add.png'
-import userTrust from '@/assets/user-trust.png'
-import userPen from '@/assets/user-pen.png'
+
 
 
 

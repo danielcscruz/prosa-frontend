@@ -4,6 +4,11 @@ import { useAuthStore } from '../stores/auth.js'
 import { useRoute } from 'vue-router'
 import api from '../services/api.js'
 import PostList from './PostList.vue'
+import userAdd from '@/assets/user-add.png'
+import userTrust from '@/assets/user-trust.png'
+import userPen from '@/assets/user-pen.png'
+import xMark from '@/assets/xmark.png'
+
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -172,19 +177,18 @@ const following_count = computed(() => userData.value.following_count || 0)
           <div>
             <!-- Botão de editar perfil, altera o ícone quando em modo de edição -->
             <div v-if="userData.is_me" class="hide-group">
-              <img @click="toggleEditProfile" class="icon-action" alt="Editar"
-                :src="isEditing ? '/src/assets/xmark.png' : '/src/assets/user-pen.png'" />
+              <img @click="toggleEditProfile" class="icon-action" alt="Editar" :src="isEditing ? xMark : userPen" />
               <div class="hide-text">
               </div>
 
             </div>
             <div v-else-if="!userData.is_following" class="hide-group">
-              <img src="../assets/user-add.png" @click="toggleFollow" class="icon-action" alt="Seguir" />
+              <img :src="userAdd" @click="toggleFollow" class="icon-action" alt="Seguir" />
               <div class="hide-text">
               </div>
             </div>
             <div v-else @click="toggleFollow" class="hide-group">
-              <img src="../assets/user-trust.png" class="icon-action" alt="Deixar de seguir" />
+              <img :src="userTrust" class="icon-action" alt="Deixar de seguir" />
               <div class="hide-text">
               </div>
 
@@ -209,6 +213,9 @@ const following_count = computed(() => userData.value.following_count || 0)
           <button type="button" @click="saveProfileChanges"
             :disabled="(!editedFirstName && !editedLastName && !editedUsername) && !selectedAvatarFile">Salvar</button>
         </form>
+        import userAdd from '@/assets/user-add.png'
+        import userTrust from '@/assets/user-trust.png'
+        import userPen from '@/assets/user-pen.png'
       </div>
     </div>
     <div>
