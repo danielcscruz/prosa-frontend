@@ -33,11 +33,13 @@ import { RouterLink } from 'vue-router'
 .container-group {
   display: flex;
   flex-direction: row;
+  padding: 20px;
   gap: 50px;
 
   @media screen and (max-width: 900px) {
     margin: auto auto;
     flex-direction: column;
+    align-items: center;
     gap: 0;
   }
 

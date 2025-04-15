@@ -144,6 +144,12 @@ form {
   align-items: center;
   background-color: var(--beige-background);
   border-radius: 16px;
+
+  @media screen and (max-width: 900px) {
+    background-color: var(--beige-container);
+
+  }
+
 }
 
 h2 {

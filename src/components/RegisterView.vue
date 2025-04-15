@@ -1,14 +1,42 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useRouter } from 'vue-router';
+import { useForm, useField } from 'vee-validate'; // Importação de funções necessárias para validação
+import * as yup from 'yup'; // Importação de yup para schema de validação
 
-const first_name = ref("");
-const last_name = ref("");
-const username = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+
+// const first_name = ref("");
+// const last_name = ref("");
+// const username = ref("");
+// const email = ref("");
+// const password = ref("");
+// const confirmPassword = ref("");
 const router = useRouter();
+
+// Definir o esquema de validação com yup
+const schema = yup.object({
+  first_name: yup.string().required('O nome é obrigatório'), // Validação para o campo 'first_name'
+  last_name: yup.string().required('O sobrenome é obrigatório'), // Validação para o campo 'last_name'
+  username: yup.string().required('O nome de usuário é obrigatório'), // Validação para o campo 'username'
+  email: yup.string().email('E-mail inválido').required('O e-mail é obrigatório'), // Validação para o campo 'email'
+  password: yup.string().min(8, 'A senha deve ter pelo menos 8 caracteres').required('A senha é obrigatória'), // Validação para o campo 'password'
+  confirmPassword: yup.string()
+    .oneOf([yup.ref('password')], 'As senhas não coincidem') // Validação para garantir que a senha e a confirmação sejam iguais
+    .required('A confirmação de senha é obrigatória')
+});
+// Usando `useForm` para controlar o formulário, com esquema de validação do yup
+const { handleSubmit } = useForm({
+  validationSchema: schema
+});
+
+// Usar `useField` para cada campo do formulário, vinculando a validação
+const { value: first_name, errorMessage: firstNameError } = useField('first_name'); // Primeiro nome
+const { value: last_name, errorMessage: lastNameError } = useField('last_name'); // Sobrenome
+const { value: username, errorMessage: usernameError } = useField('username'); // Nome de usuário
+const { value: email, errorMessage: emailError } = useField('email'); // E-mail
+const { value: password, errorMessage: passwordError } = useField('password'); // Senha
+const { value: confirmPassword, errorMessage: confirmPasswordError } = useField('confirmPassword'); // Confirmação de senha
+
+
 
 const register = async () => {
   if (password.value !== confirmPassword.value) {
@@ -46,33 +74,46 @@ const register = async () => {
     alert("Erro ao conectar ao servidor.");
   }
 }
+// Enviar formulário com validação
+const submitForm = handleSubmit(register); // Aplica a validação antes de chamar a função de registro
 </script>
 
 <template>
   <div class="container">
     <img alt="capivara logo" src="@/assets/logo2.png" class="logo" />
     <h2> Registre no Prosa</h2>
-    <form @submit.prevent="register">
+    <form @submit.prevent="submitForm">
       <div class="group">
         <div class="input-field">
           <input type="text" placeholder="nome" v-model="first_name" />
+          <span v-if="firstNameError" class="error">{{ firstNameError }}</span> <!-- Exibe erro se houver -->
         </div>
         <div class="input-field">
           <input type="text" placeholder="sobrenome" v-model="last_name" />
+          <span v-if="lastNameError" class="error">{{ lastNameError }}</span> <!-- Exibe erro se houver -->
+
         </div>
       </div>
 
       <div class="input-field">
         <input type="text" placeholder="email" v-model="email" />
+        <span v-if="emailError" class="error">{{ emailError }}</span> <!-- Exibe erro se houver -->
+
       </div>
       <div class="input-field">
         <input type="text" placeholder="usuário" v-model="username" />
+        <span v-if="usernameError" class="error">{{ usernameError }}</span> <!-- Exibe erro se houver -->
+
       </div>
       <div class="input-field">
         <input type="password" placeholder="senha" v-model="password" />
+        <span v-if="passwordError" class="error">{{ passwordError }}</span> <!-- Exibe erro se houver -->
+
       </div>
       <div class="input-field">
         <input type="password" placeholder="confirme a senha" v-model="confirmPassword" />
+        <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span> <!-- Exibe erro se houver -->
+
       </div>
       <button type="submit">Registrar</button>
       <h4>Já é cadastrado? <a href="/login">Entre aqui</a></h4>
@@ -84,6 +125,11 @@ const register = async () => {
 </template>
 
 <style scoped>
+.error {
+  color: var(--error-red);
+  font-size: 12px;
+}
+
 .group {
   display: flex;
   width: 100%;
@@ -187,6 +233,11 @@ form {
   align-items: center;
   background-color: var(--beige-background);
   border-radius: 16px;
+
+  @media screen and (max-width: 900px) {
+    background-color: var(--beige-container);
+
+  }
 }
 
 h2 {

@@ -96,13 +96,13 @@ span.maxed-out {
 }
 
 .container-post {
-  display: block;
+  /* display: block; */
   /* padding: 8px 16px; */
 }
 
 .header {
-  max-width: 100%;
-  margin: 8px 8px;
+  width: 100%;
+  padding: 0 16px;
 }
 
 .header h3 {

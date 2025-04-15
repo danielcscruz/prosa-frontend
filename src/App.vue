@@ -12,7 +12,7 @@ const appStore = useAppStore()
 
 <template>
   <div class="wrapper">
-    <MainBar v-if="!appStore.isPublicRoute" class="f-1" />
+    <MainBar v-if="!appStore.isPublicRoute" class="f-1 border" />
     <router-view />
     <FeatBar v-if="!appStore.isPublicRoute" class="f-1 feat" />
   </div>
@@ -23,6 +23,22 @@ body {
   background-color: var(--green-sage);
 }
 
+.border {
+  border-right: 1px solid var(--beige-background);
+
+  @media screen and (max-width: 900px) {
+    border-right: none;
+    border-bottom: 1px solid var(--beige-background);
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+}
+
 .f-1 {
   flex: 1;
   height: 100%
@@ -30,8 +46,11 @@ body {
 }
 
 .feat {
-  @media screen and (max-width: 1020px) {
-    display: none;
+  @media screen and (max-width: 900px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 }
 
@@ -46,7 +65,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
 
   @media screen and (max-width: 900px) {
     position: relative;

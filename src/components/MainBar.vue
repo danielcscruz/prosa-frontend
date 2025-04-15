@@ -1,7 +1,8 @@
 <script setup lang="ts">
+
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'  // Importando a store
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const authStore = useAuthStore()
 
@@ -18,35 +19,40 @@ const logout = () => {
   authStore.logout()
 }
 
+// Controle do menu no mobile
+const showMenu = ref(false)
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value
+}
 
 </script>
+
 
 <template>
   <div>
 
     <div class="container-profile">
-      <img alt="capivara logo" src="@/assets/logo.png" width="200" height="200" />
-      <nav>
-        <RouterLink to="/" class="nav-group" active-class="active-nav" exact-active-class="exact-nav"> <img alt="Home"
-            class="icon" src="@/assets/home.png" />
+      <img alt="burger menu" src="@/assets/burger.png" class="burger-menu" @click="toggleMenu" />
+      <img alt="capivara logo" src="@/assets/logo.png" class="capi-logo" />
+      <nav :class="{ 'nav-mobile': showMenu }">
+        <RouterLink @click="showMenu = false" to="/" class="nav-group" active-class="active-nav"
+          exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/home.png" />
           Início
         </RouterLink>
-        <RouterLink to="/explore" class="nav-group" active-class="active-nav" exact-active-class="exact-nav"> <img
-            alt="Home" class="icon" src="@/assets/globe.png" />
+        <RouterLink @click="showMenu = false" to="/explore" class="nav-group" active-class="active-nav"
+          exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/globe.png" />
           Explorar
         </RouterLink>
-        <RouterLink to="/bookmark" class="nav-group" active-class="active-nav" exact-active-class="exact-nav"> <img
-            alt="Home" class="icon" src="@/assets/bookmark.png" />
+        <RouterLink @click="showMenu = false" to="/bookmark" class="nav-group" active-class="active-nav"
+          exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/bookmark.png" />
           Marcado
         </RouterLink>
-        <RouterLink :to="'/profile/' + username" class="nav-group" active-class="active-nav"
+        <RouterLink @click="showMenu = false" :to="'/profile/' + username" class="nav-group" active-class="active-nav"
           exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/user.png" />
           Perfil
         </RouterLink>
       </nav>
-      <!-- <button>
-        Prosear
-      </button> -->
+
       <div class="auth" v-if="isAuthenticated">
         <div class="avatar-group">
           <div class="avatar-wrapper">
@@ -69,6 +75,62 @@ const logout = () => {
 </template>
 
 <style scoped>
+@media screen and (max-width: 900px) {
+  nav {
+    display: none;
+  }
+
+  nav.nav-mobile {
+    display: flex;
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    background-color: var(--light-cream);
+    border-radius: 20px;
+    padding: 20px;
+    width: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1000;
+  }
+}
+
+
+.burger-menu {
+  display: none;
+  opacity: 0.8;
+
+  @media screen and (max-width: 900px) {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    height: 50px;
+    width: 50px;
+    border: 1px solid var(--beige-background);
+    border-radius: 10px;
+    padding: 6px;
+    cursor: pointer;
+
+  }
+}
+
+.burger-menu:hover {
+  background-color: var(--capivara);
+}
+
+.capi-logo {
+  height: 200px;
+  width: 200px;
+
+  @media screen and (max-width: 900px) {
+    height: 150px;
+    width: 150px;
+
+  }
+}
+
 .active-nav {
   background-color: var(--beige-background);
 }
@@ -126,6 +188,12 @@ const logout = () => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  @media screen and (max-width: 900px) {
+    display: none;
+
+
+  }
 }
 
 .avatar-wrapper {
@@ -153,17 +221,19 @@ const logout = () => {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+
+  @media screen and (max-width: 900px) {
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+
+  }
 }
 
 nav {
-  display: block;
   flex-direction: column;
   align-items: flex-start;
   width: 80%;
-
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
 
 }
 

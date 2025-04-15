@@ -216,7 +216,7 @@ const following_count = computed(() => userData.value.following_count || 0)
       </div>
     </div>
     <div>
-      <PostList />
+      <PostList v-if="!isEditing" />
     </div>
   </div>
 </template>
@@ -352,7 +352,7 @@ input {
   border-bottom-right-radius: 16px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 20px 8px;
   transition: all 0.3s ease;
 }
 
