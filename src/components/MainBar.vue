@@ -44,9 +44,9 @@ const logout = () => {
           Perfil
         </RouterLink>
       </nav>
-      <button>
+      <!-- <button>
         Prosear
-      </button>
+      </button> -->
       <div class="auth" v-if="isAuthenticated">
         <div class="avatar-group">
           <div class="avatar-wrapper">
@@ -131,8 +131,8 @@ const logout = () => {
 .avatar-wrapper {
   margin: 8px 16px;
 
-  height: 40px;
-  width: 40px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;

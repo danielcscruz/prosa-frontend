@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 import api from '../services/api.js'
 
-
 interface Post {
   id: number;
   name: string;
@@ -12,7 +11,6 @@ interface Post {
   likes: number;
   user_avatar: string;
 }
-const posts = ref<Post[]>([])
 
 interface User {
   id: number;
@@ -21,11 +19,20 @@ interface User {
   avatar: string;
 }
 
+interface PostResponse {
+  results: Post[];
+}
+
+interface UserResponse {
+  results: User[];
+}
+
+const posts = ref<Post[]>([])
 const users = ref<User[]>([])
 
 const fetchPosts = async () => {
   try {
-    const response = await api.get<Post[]>('/api/most-liked-posts/')
+    const response = await api.get<PostResponse>('/api/most-liked-posts/')
     posts.value = response.data.results
   } catch (error) {
     console.error("Erro ao buscar items: ", error)
@@ -35,7 +42,7 @@ onMounted(fetchPosts)
 
 const fetchUsers = async () => {
   try {
-    const response = await api.get<User[]>('/api/random-users/')
+    const response = await api.get<UserResponse>('/api/random-users/')
     users.value = response.data.results
   } catch (error) {
     console.error("Erro ao buscar items: ", error)
@@ -48,6 +55,7 @@ const truncatedContent = (content: string) => {
 }
 
 </script>
+
 
 <template>
   <div class="container-feats">

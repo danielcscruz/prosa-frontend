@@ -11,7 +11,6 @@ import { RouterLink } from 'vue-router'
 
       <p>Uma rede de microblog feita pra você prosear à vontade, com leveza e respeito.</p>
 
-      <p>A moderação rola por inteligência artificial, só pra manter o clima sempre tranquilo.</p>
 
     </div>
     <div class="container">
