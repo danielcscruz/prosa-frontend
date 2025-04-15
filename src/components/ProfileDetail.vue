@@ -213,9 +213,6 @@ const following_count = computed(() => userData.value.following_count || 0)
           <button type="button" @click="saveProfileChanges"
             :disabled="(!editedFirstName && !editedLastName && !editedUsername) && !selectedAvatarFile">Salvar</button>
         </form>
-        import userAdd from '@/assets/user-add.png'
-        import userTrust from '@/assets/user-trust.png'
-        import userPen from '@/assets/user-pen.png'
       </div>
     </div>
     <div>
