@@ -1,15 +1,48 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const email = ref('')
+const message = ref('')
+const error = ref(false)
+
+const requestNewPassword = async () => {
+  try {
+    const response = await fetch('https://prosa-app-31830595ff5b.herokuapp.com/forgot-password/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email.value }),
+    })
+
+    const data = await response.json()
+
+    if (response.ok) {
+      message.value = data.message || 'Nova senha enviada para seu e-mail.'
+      error.value = false
+    } else {
+      message.value = data.error || 'Erro ao enviar nova senha. Verifique o e-mail informado.'
+      error.value = true
+    }
+  } catch (err) {
+    console.error(err)
+    message.value = 'Erro de conexão. Tente novamente mais tarde.'
+    error.value = true
+  }
+}
+</script>
 
 <template>
   <div class="container">
     <img alt="capivara logo" src="@/assets/logo2.png" class="logo" />
     <h2> Entrar no Prosa</h2>
-    <form>
+    <form @submit.prevent="requestNewPassword">
       <div class="input-field">
         <input type="text" placeholder="email" />
       </div>
 
-      <button>Enviar</button>
+      <button type="submit">Enviar</button>
+      <h5 v-if="message" :style="{ color: error ? 'red' : 'green' }">{{ message }}</h5>
       <h4><a href="/login">Voltar</a></h4>
 
 

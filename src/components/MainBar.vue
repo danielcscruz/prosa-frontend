@@ -51,22 +51,24 @@ const toggleMenu = () => {
           exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/user.png" />
           Perfil
         </RouterLink>
+        <div class="auth" v-if="isAuthenticated">
+          <div class="avatar-group">
+            <div class="avatar-wrapper">
+              <img :src="avatar" class="avatar-mainbar" />
+            </div>
+            <div class="profile-auth">
+              <h3>{{ name }}</h3>
+              <h5>@{{ username }}</h5>
+            </div>
+          </div>
+          <div class="logout-circle" @click="logout">
+            <img src="../assets/logout.png" class="logout" />
+          </div>
+        </div>
       </nav>
 
-      <div class="auth" v-if="isAuthenticated">
-        <div class="avatar-group">
-          <div class="avatar-wrapper">
-            <img :src="avatar" class="avatar-mainbar" />
-          </div>
-          <div class="profile-auth">
-            <h3>{{ name }}</h3>
-            <h5>@{{ username }}</h5>
-          </div>
-        </div>
-        <div class="logout-circle" @click="logout">
-          <img src="../assets/logout.png" class="logout" />
-        </div>
-      </div>
+
+
     </div>
     <p>
 
@@ -189,11 +191,6 @@ const toggleMenu = () => {
   flex-direction: row;
   justify-content: space-between;
 
-  @media screen and (max-width: 900px) {
-    display: none;
-
-
-  }
 }
 
 .avatar-wrapper {

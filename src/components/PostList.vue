@@ -208,10 +208,10 @@ const deletePost = async (postId: number) => {
           <img :src="post.user_avatar" class="avatar-img" alt="avatar" />
         </div>
         <div class="content">
-          <div class="title">
+          <RouterLink :to="`/profile/${post.username}`" class="title">
             <h3>{{ post.name }}</h3>
             <h4>@{{ post.username }}</h4>
-          </div>
+          </RouterLink>
 
           <!-- Verifica se é repost e exibe o conteúdo adequado -->
           <div class="post">
@@ -330,11 +330,13 @@ ul {
   display: flex;
   align-items: center;
   gap: 4px;
+  text-decoration: none;
 }
 
 .title h3 {
   font-size: 18px;
   font-weight: 700;
+  color: var(--brown-mud);
 }
 
 .title h4 {

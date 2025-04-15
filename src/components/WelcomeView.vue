@@ -8,10 +8,8 @@ import { RouterLink } from 'vue-router'
     <div class="container">
       <img alt="capivara logo" src="@/assets/welcome.png" class="welcome-img" />
       <h2>Bem-vindo ao <b>Prosa</b>!</h2>
-
-      <p>Uma rede de microblog feita pra você prosear à vontade, com leveza e respeito.</p>
-
-
+      <p>Uma rede de microblog feita pra você prosear à vontade, </p>
+      <p> com leveza e respeito.</p>
     </div>
     <div class="container">
 
@@ -32,32 +30,32 @@ import { RouterLink } from 'vue-router'
 
 .container-group {
   display: flex;
-  flex-direction: row;
-  padding: 20px;
-  gap: 50px;
+  width: 100vw;
+  height: 100vh;
+
 
   @media screen and (max-width: 900px) {
-    margin: auto auto;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 0;
   }
 
 }
 
 .container {
-  width: 400px;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 600px;
   align-items: center;
   justify-content: center;
 
   @media screen and (max-width: 900px) {
+
     height: 100%;
     width: 100%;
-    margin: 20px;
     align-items: center;
+    justify-content: center;
   }
 
 
@@ -77,6 +75,9 @@ p {
   line-height: 18px;
   text-align: center;
   margin-top: 8px;
+  white-space: normal;
+  /* permite que o texto quebre automaticamente */
+
 }
 
 .button {
