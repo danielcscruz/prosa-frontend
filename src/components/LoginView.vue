@@ -16,6 +16,7 @@ const login = async () => {
     await authStore.login(username.value, password.value);
     router.push('/'); // ou qualquer outra rota de sucesso
   } catch (error) {
+    console.log(error)
     errorMessage.value = 'Credenciais inválidas. Tente novamente.';
   }
 };
@@ -30,7 +31,7 @@ const login = async () => {
     <h2> Entrar no Prosa</h2>
     <form @submit.prevent="login">
       <div class="input-field">
-        <input v-model="username" type="text" placeholder="username" />
+        <input v-model="username" type="text" placeholder="usuário" />
       </div>
       <div class="input-field">
         <input v-model="password" type="password" placeholder="senha" />

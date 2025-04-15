@@ -6,15 +6,17 @@ import RegisterView from '@/components/RegisterView.vue'
 import PasswordView from '@/components/PasswordView.vue'
 import ExploreView from '@/components/ExploreView.vue'
 import BookmarkView from '@/components/BookmarkView.vue'
+import WelcomeView from '@/components/WelcomeView.vue'
 
 import { useAuthStore } from '../stores/auth'
 
 const routes = [
   { path: '/', name: 'dashboard', component: DashboardView },
-  // { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
-  { path: '/profile', name: 'profile', component: ProfileView },
+  // { path: '/profile', name: 'profile', component: ProfileView },
+  { path: '/profile/:username/:postId?', name: 'profile', component: ProfileView },
   { path: '/explore', name: 'explore', component: ExploreView },
   { path: '/bookmark', name: 'bookmark', component: BookmarkView },
+  { path: '/welcome', name: 'welcome', component: WelcomeView },
 
   { path: '/login', name: 'login', component: LoginView },
   { path: '/register', name: 'register', component: RegisterView },
@@ -29,9 +31,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore()
 
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    // Not logged in and trying to access a protected route
-    next({ path: '/login' })
+  const publicPages = ['/login', '/register', '/password', '/welcome']
+  const authRequired = !publicPages.some((page) => to.path.startsWith(page))
+
+  if (authRequired && !auth.isAuthenticated) {
+    next('/welcome')
   } else {
     next()
   }

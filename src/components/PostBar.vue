@@ -1,22 +1,71 @@
 <script setup lang="ts">
+import api from '../services/api'
+import { ref, computed } from 'vue'
 import PostList from './PostList.vue';
+import { useAuthStore } from '@/stores/auth'
+
+const text = ref('')               // Holds the user input
+const maxLength = 140
+
+const characterCount = computed(() => `${text.value.length}/${maxLength}`)
+const isMaxed = computed(() => text.value.length >= maxLength)
+
+const isDisabled = computed(() => text.value.length === 0 || isMaxed.value)
+
+const authStore = useAuthStore()
+
+const id = authStore.user?.id
+
+const postListRef = ref()
+
+const postContent = async () => {
+  try {
+    const token = authStore.accessToken
+    console.log(id)
+    const response = await api.post(
+      'http://localhost:8000/api/posts/',
+      {
+        content: text.value,
+        user: id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    console.log('Post enviado com sucesso!', response.data)
+    text.value = '' // limpa o textarea após postar
+    postListRef.value?.refresh()
+
+  } catch (err) {
+    console.error('Erro ao enviar post:', err)
+  }
+}
+
+// Limit input manually
+const handleInput = (e: Event) => {
+  const input = (e.target as HTMLTextAreaElement).value
+  text.value = input.slice(0, maxLength) // Cut off after 140 chars
+}
 </script>
 
 <template>
   <div class="container-post">
-
     <div class="header">
       <h3>No que você está pensando?</h3>
       <div class="post-area">
-        <textarea placeholder="Digite aqui..."></textarea>
+        <textarea :value="text" @input="handleInput" placeholder="Digite aqui..."></textarea>
         <div class="btn-group">
-          <button> Prosear</button>
-          <span>0/140</span>
+          <button :disabled="isDisabled" @click="postContent"> Prosear</button>
+          <span :class="{ 'maxed-out': isMaxed }">{{ characterCount }}</span>
         </div>
       </div>
     </div>
     <div>
-      <PostList />
+      <PostList ref="postListRef" />
     </div>
 
   </div>
@@ -24,9 +73,31 @@ import PostList from './PostList.vue';
 </template>
 
 <style scoped>
+button:disabled {
+  background-color: var(--disabled-gray);
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background-color: var(--disabled-gray);
+  cursor: not-allowed;
+}
+
+span {
+  font-family: Inter;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  color: var(--brown-mud);
+}
+
+span.maxed-out {
+  color: var(--error-red);
+}
+
 .container-post {
   display: block;
-  padding: 8px 16px;
+  /* padding: 8px 16px; */
 }
 
 .header {
@@ -37,7 +108,7 @@ import PostList from './PostList.vue';
 .header h3 {
   font-family: Inter;
   font-weight: 800;
-  color: #4E2E10;
+  color: var(--brown-mud);
   font-size: 24px;
 }
 
@@ -76,12 +147,7 @@ button:hover {
   background-color: var(--capivara);
 }
 
-span {
-  font-family: inter;
-  text-align: center;
-  font-weight: bold;
-  font-size: 12px;
-}
+
 
 textarea {
   background-color: transparent;

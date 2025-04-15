@@ -61,6 +61,7 @@ const register = async () => {
           <input type="text" placeholder="sobrenome" v-model="last_name" />
         </div>
       </div>
+
       <div class="input-field">
         <input type="text" placeholder="email" v-model="email" />
       </div>

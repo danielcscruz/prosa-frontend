@@ -1,71 +1,360 @@
 <script setup lang="ts">
-import PostList from './PostList.vue';
+import { ref, watch, computed } from 'vue'
+import { useAuthStore } from '../stores/auth.js'
+import { useRoute } from 'vue-router'
+import api from '../services/api.js'
+import PostList from './PostList.vue'
+
+const route = useRoute()
+const authStore = useAuthStore()
+
+const username = computed(() => route.params.username as string)
+
+const editedFirstName = ref('')
+const editedLastName = ref('')
+const editedUsername = ref('')
+
+const selectedAvatarFile = ref<File | null>(null)
+
+const saveProfileChanges = async () => {
+  const formData = new FormData()
+
+  if (editedFirstName.value.trim()) {
+    formData.append('first_name', editedFirstName.value.trim())
+  }
+  if (editedLastName.value.trim()) {
+    formData.append('last_name', editedLastName.value.trim())
+  }
+  if (editedUsername.value.trim()) {
+    formData.append('username', editedUsername.value.trim())
+  }
+  if (selectedAvatarFile.value) {
+    formData.append('avatar', selectedAvatarFile.value)
+  }
+
+  if ([...formData.entries()].length === 0) {
+    console.log('Nenhum campo foi preenchido.')
+    return
+  }
+
+  try {
+    await api.patch('/api/users/me/', formData, {
+      headers: {
+        Authorization: `Bearer ${authStore.accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+
+    await fetchUserData()
+    isEditing.value = false
+    editedFirstName.value = ''
+    editedLastName.value = ''
+    editedUsername.value = ''
+    selectedAvatarFile.value = null
+
+    console.log('Perfil atualizado com sucesso!')
+  } catch (error) {
+    console.error('Erro ao salvar perfil:', error)
+  }
+}
+
+interface User {
+  id: number;
+  name: string;
+  username: string;
+  avatar: string;
+}
+
+// Variáveis reativas para armazenar as informações do usuário
+const userData = ref({
+  first_name: '',
+  last_name: '',
+  avatar: '/default-avatar.png',
+  followers_count: 0,
+  following_count: 0,
+  is_me: false,
+  is_following: false,
+  username: '',
+})
+
+// Variável para controle do estado de edição
+const isEditing = ref(false)
+
+// Função para buscar informações do usuário
+const fetchUserData = async () => {
+  try {
+    const response = await api.get(`/api/users/profile/${username.value}/`, {
+      headers: {
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    })
+    userData.value = response.data
+  } catch (error) {
+    console.error('Erro ao buscar informações do usuário:', error)
+  }
+}
+
+watch(
+  () => route.params.username,
+  () => {
+    fetchUserData()
+  },
+  { immediate: true } // já chama na primeira vez
+)
+
+const toggleFollow = async () => {
+  const userResponse = await api.get(`/api/users/?username=${username.value}`)
+  const user = userResponse.data.results.find((u: User) => u.username === username.value)
+
+  if (!user) {
+    console.error('Usuário não encontrado com esse username.')
+    return
+  }
+  const userId = user.id
+
+  await api.post(`/api/users/${userId}/follow/`, {}, {
+    headers: { Authorization: `Bearer ${authStore.accessToken}` }
+  })
+  // Atualiza o estado local
+  await fetchUserData()
+}
+
+// Função de toggle para edição
+const toggleEditProfile = () => {
+  isEditing.value = !isEditing.value
+}
+
+const handleAvatarUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (file) {
+    selectedAvatarFile.value = file
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      userData.value.avatar = reader.result as string
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
+
+const first_name = computed(() => userData.value.first_name || 'Nome')
+const last_name = computed(() => userData.value.last_name || 'Nome')
+const avatar = computed(() => userData.value.avatar || '/default-avatar.png')
+const followers_count = computed(() => userData.value.followers_count || 0)
+const following_count = computed(() => userData.value.following_count || 0)
 </script>
 
 <template>
   <div class="container-post">
-    <div class="header-image">
+    <div class="header-image" :class="{ 'editing': isEditing }">
       <div class="card">
         <div class="avatar-container">
-          <img src="../assets/avatar.png" class="avatar-image" alt="">
+          <img :src="avatar" class="avatar-image" alt="Avatar do usuário" />
         </div>
         <div class="details">
           <div>
-            <h2>Daniel Cruz</h2>
-            <h4>@danzinho</h4>
+            <h2>{{ first_name }} {{ last_name }}</h2>
+            <h4>@{{ username }}</h4>
           </div>
           <div class="stats">
             <div>
-              <h2>11</h2>
+              <h2>{{ following_count }}</h2>
               <h4>seguindo</h4>
             </div>
             <div>
-              <h2>15</h2>
+              <h2>{{ followers_count }}</h2>
               <h4>seguidores</h4>
             </div>
           </div>
           <div>
-            <!-- <img src="../assets/user-add.png" class="icon-action" /> -->
-            <!-- <img src="../assets/user-trust.png" class="icon-action" /> -->
-            <img src="../assets/user-pen.png" class="icon-action" />
+            <!-- Botão de editar perfil, altera o ícone quando em modo de edição -->
+            <div v-if="userData.is_me" class="hide-group">
+              <img @click="toggleEditProfile" class="icon-action" alt="Editar"
+                :src="isEditing ? '/src/assets/xmark.png' : '/src/assets/user-pen.png'" />
+              <div class="hide-text">
+              </div>
+
+            </div>
+            <div v-else-if="!userData.is_following" class="hide-group">
+              <img src="../assets/user-add.png" @click="toggleFollow" class="icon-action" alt="Seguir" />
+              <div class="hide-text">
+              </div>
+            </div>
+            <div v-else @click="toggleFollow" class="hide-group">
+              <img src="../assets/user-trust.png" class="icon-action" alt="Deixar de seguir" />
+              <div class="hide-text">
+              </div>
+
+            </div>
+
           </div>
         </div>
-
-        <div>
-
-        </div>
+      </div>
+      <div class="toggle" v-show="isEditing">
+        <form class="edit">
+          <div class="input-field">
+            <input type="text" :placeholder="userData.first_name" v-model="editedFirstName" />
+          </div>
+          <div class="input-field">
+            <input type="text" :placeholder="userData.last_name" v-model="editedLastName" />
+          </div>
+          <div class="input-field">
+            <input type="text" :placeholder="userData.username || username" v-model="editedUsername" />
+          </div>
+          <label for="avatar-upload" class="custom-upload-button">Clique aqui para escolher uma nova foto</label>
+          <input type="file" id="avatar-upload" @change="handleAvatarUpload" accept="image/*" class="hidden-input" />
+          <button type="button" @click="saveProfileChanges"
+            :disabled="(!editedFirstName && !editedLastName && !editedUsername) && !selectedAvatarFile">Salvar</button>
+        </form>
       </div>
     </div>
     <div>
       <PostList />
     </div>
-
   </div>
-
 </template>
 
 <style scoped>
+.hidden-input {
+  display: none;
+}
+
+.hide-text {
+  width: 20px;
+}
+
+.hide-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hide-group h4 {
+  font-size: 12px;
+}
+
+.custom-upload-button {
+  background-color: var(--green-moss);
+  color: rgb(28, 27, 27);
+  padding: 8px 16px;
+  border-radius: 8px;
+  width: 250px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.custom-upload-button:hover {
+  background-color: var(--green-moss-dark);
+}
+
+button {
+  background-color: transparent;
+  border: 1px solid var(--light-cream);
+  width: 200px;
+  height: 40px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 40px;
+  color: var(--light-cream);
+}
+
+button:hover {
+  background-color: var(--light-cream);
+  border: 1px solid var(--light-cream);
+  color: var(--green-moss)
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* This centers the input fields horizontally */
+
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  /* <-- Adiciona isso */
+
+  width: 100%;
+  gap: 20px;
+  height: 450px;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  border-radius: 3px;
+  border: 1px solid var(--light-cream);
+  background-color: var(--beige-background);
+  height: 30px;
+  width: 300px;
+  margin: 0 auto;
+  /* Centers the input field horizontally */
+
+}
+
+input {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--green-moss);
+  font-weight: 400;
+  font-size: 20px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
 .icon-action {
   height: 25px;
   width: 25px;
   transition: transform 0.1s ease-in-out;
   cursor: pointer;
-
 }
 
 .icon-action:hover {
   transform: scale(1.5);
 }
 
-
-
 .header-image {
-  height: 150px;
   background-color: var(--green-sage);
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   display: flex;
+  flex-direction: column;
   padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.header-image.editing {
+  padding: 50px 20px;
+  /* Aumenta o padding quando editando */
 }
 
 .card {
@@ -74,7 +363,6 @@ import PostList from './PostList.vue';
   gap: 20px;
   line-height: 20px;
   width: 100%;
-
 }
 
 .details {
@@ -82,7 +370,6 @@ import PostList from './PostList.vue';
   align-items: center;
   width: 100%;
   justify-content: space-between;
-
 }
 
 .stats {
@@ -91,14 +378,12 @@ import PostList from './PostList.vue';
   gap: 20px;
   justify-content: center;
   text-align: center;
-
 }
 
 .avatar-image {
   height: 100px;
   width: 100px;
   object-fit: cover;
-  /* Ensures the image fills the circle */
   border-radius: 50%;
 }
 

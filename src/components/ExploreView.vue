@@ -1,14 +1,10 @@
 <script setup lang="ts">
 
-import FeatBar from './FeatBar.vue';
-import ProfileBar from './MainBar.vue';
 import ExploreBar from './ExploreBar.vue';
 </script>
 
 <template>
-  <ProfileBar class="f-1" />
   <ExploreBar class="f-2 border" />
-  <FeatBar class="f-1" />
 </template>
 
 <style scoped>

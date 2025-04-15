@@ -18,7 +18,7 @@ interface User {
   id: number;
   name: string;
   username: string;
-  user_avatar: string;
+  avatar: string;
 }
 
 const users = ref<User[]>([])
@@ -26,7 +26,7 @@ const users = ref<User[]>([])
 const fetchPosts = async () => {
   try {
     const response = await api.get<Post[]>('/api/most-liked-posts/')
-    posts.value = response.data
+    posts.value = response.data.results
   } catch (error) {
     console.error("Erro ao buscar items: ", error)
   }
@@ -35,8 +35,8 @@ onMounted(fetchPosts)
 
 const fetchUsers = async () => {
   try {
-    const response = await api.get<Post[]>('/api/random-users/')
-    users.value = response.data
+    const response = await api.get<User[]>('/api/random-users/')
+    users.value = response.data.results
   } catch (error) {
     console.error("Erro ao buscar items: ", error)
   }
@@ -46,46 +46,46 @@ onMounted(fetchUsers)
 const truncatedContent = (content: string) => {
   return content.length > 50 ? content.substring(0, 50) + '...' : content
 }
+
 </script>
 
 <template>
   <div class="container-feats">
+    <!-- <div class="feat-box" v-if="posts.length"> -->
     <div class="feat-box">
+
       <h2>Posts mais curtidos</h2>
       <ul>
 
         <li v-for="post in posts" :key="post.id">
-          <div class="card-post-list">
+          <router-link :to="`/profile/${post.username}/${post.id}`" class="card-post-list">
             <h3>{{ truncatedContent(post.content) }}</h3>
             <div class="details">
-              <h4>@ {{ post.username }}</h4>
-              <h5>{{ post.likes }} curtidas</h5>
+              <h5>@ {{ post.username }}</h5>
+              <h4>{{ post.likes }} curtidas</h4>
             </div>
-
-          </div>
+          </router-link>
         </li>
 
       </ul>
     </div>
 
+    <!-- <div class="feat-box" v-if="users.length"> -->
     <div class="feat-box">
+
       <h2>Quem Seguir</h2>
       <ul>
         <li v-for="user in users" :key="user.id">
-          <div class="card-add-list">
+          <router-link :to="`/profile/${user.username}`" class="card-add-list">
             <div class="profile-feat">
-              <img :src=user.user_avatar alt="user" class="avatar-feat" />
+              <img :src="user.avatar" alt="user" class="avatar-feat" />
               <div class="user-group">
                 <h3>{{ user.name }}</h3>
                 <h4>@{{ user.username }}</h4>
               </div>
             </div>
-            <div class="add-circle">
-              <img src="@/assets/user-add.png" alt="" class="add-feat" />
-            </div>
-          </div>
+          </router-link>
         </li>
-
 
       </ul>
     </div>
@@ -103,6 +103,31 @@ const truncatedContent = (content: string) => {
   justify-content: space-between;
   width: 100%;
   gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.card-post-list {
+  padding-left: 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 4px;
+  align-items: center;
+
+}
+
+.card-post-list:hover {
+  background-color: var(--green-moss);
 
 }
 
@@ -182,37 +207,14 @@ const truncatedContent = (content: string) => {
   margin-top: 20px;
 }
 
-.card-post-list {
-  padding-left: 4px;
-  border-radius: 8px;
-  cursor: pointer;
-  padding-top: 8px;
-  line-height: 20px;
-}
-
-.card-post-list:hover {
-  background-color: var(--green-moss);
-
-}
 
 .card-post-list h3 {
   font-size: 18px;
   font-weight: 800;
 }
 
-/* li:not(:first-child):not(:last-child) {
 
-  border-bottom: 1px solid var(--green-moss);
-  border-top: 1px solid var(--green-moss);
-} */
 
-.details {
-  display: flex;
-  justify-content: space-between;
-  margin: 4px auto;
-  align-items: center;
-
-}
 
 .feat-box h2 {
   font-size: 20px;
@@ -228,11 +230,6 @@ const truncatedContent = (content: string) => {
   line-height: 6px;
 }
 
-.feat-box h5 {
-  margin-top: 6px;
-  margin-bottom: 4px;
-
-}
 
 .user-group h3 {
   font-size: 14px;

@@ -27,16 +27,20 @@ const logout = () => {
     <div class="container-profile">
       <img alt="capivara logo" src="@/assets/logo.png" width="200" height="200" />
       <nav>
-        <RouterLink to="/" class="nav-group"> <img alt="Home" class="icon" src="@/assets/home.png" />
+        <RouterLink to="/" class="nav-group" active-class="active-nav" exact-active-class="exact-nav"> <img alt="Home"
+            class="icon" src="@/assets/home.png" />
           Início
         </RouterLink>
-        <RouterLink to="/explore" class="nav-group"> <img alt="Home" class="icon" src="@/assets/search.png" />
+        <RouterLink to="/explore" class="nav-group" active-class="active-nav" exact-active-class="exact-nav"> <img
+            alt="Home" class="icon" src="@/assets/globe.png" />
           Explorar
         </RouterLink>
-        <RouterLink to="/bookmark" class="nav-group"> <img alt="Home" class="icon" src="@/assets/bookmark.png" />
+        <RouterLink to="/bookmark" class="nav-group" active-class="active-nav" exact-active-class="exact-nav"> <img
+            alt="Home" class="icon" src="@/assets/bookmark.png" />
           Marcado
         </RouterLink>
-        <RouterLink to="/profile" class="nav-group"> <img alt="Home" class="icon" src="@/assets/user.png" />
+        <RouterLink :to="'/profile/' + username" class="nav-group" active-class="active-nav"
+          exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/user.png" />
           Perfil
         </RouterLink>
       </nav>
@@ -45,7 +49,9 @@ const logout = () => {
       </button>
       <div class="auth" v-if="isAuthenticated">
         <div class="avatar-group">
-          <img :src="avatar" class="avatar-mainbar" />
+          <div class="avatar-wrapper">
+            <img :src="avatar" class="avatar-mainbar" />
+          </div>
           <div class="profile-auth">
             <h3>{{ name }}</h3>
             <h5>@{{ username }}</h5>
@@ -63,6 +69,14 @@ const logout = () => {
 </template>
 
 <style scoped>
+.active-nav {
+  background-color: var(--beige-background);
+}
+
+.exact-nav {
+  font-weight: bold;
+}
+
 .logout {
   height: 20px;
   width: 20px;
@@ -114,13 +128,25 @@ const logout = () => {
   justify-content: space-between;
 }
 
-.avatar-mainbar {
+.avatar-wrapper {
   margin: 8px 16px;
+
   height: 40px;
   width: 40px;
-  object-fit: cover;
   border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.avatar-mainbar {
+  height: 60px;
+  width: 60px;
+  object-position: center;
+}
+
+
 
 .container-profile {
   display: flex;
@@ -134,6 +160,10 @@ nav {
   flex-direction: column;
   align-items: flex-start;
   width: 80%;
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 
 }
 
@@ -184,6 +214,10 @@ button {
   cursor: pointer;
   margin-top: 40px;
   color: var(--light-cream);
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 }
 
 button:hover {
