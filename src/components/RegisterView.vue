@@ -5,6 +5,10 @@ import { useRouter } from 'vue-router';
 import { useForm, useField } from 'vee-validate'; // Importação de funções necessárias para validação
 import * as yup from 'yup'; // Importação de yup para schema de validação
 
+const usernameTouched = ref<boolean>(false);
+const emailTouched = ref<boolean>(false);
+
+
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
@@ -23,7 +27,7 @@ const schema = yup.object({
     .required('A confirmação de senha é obrigatória')
 });
 // Usando `useForm` para controlar o formulário, com esquema de validação do yup
-const { handleSubmit } = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: schema
 });
 
@@ -36,6 +40,32 @@ const { value: password, errorMessage: passwordError } = useField<string>('passw
 const { value: confirmPassword, errorMessage: confirmPasswordError } = useField<string>('confirmPassword');
 
 
+const isUsernameAvailable = ref(false);
+const isEmailAvailable = ref(false);
+
+const checkUsernameAvailability = async () => {
+  if (!username.value) return;
+  try {
+    const res = await fetch(`https://prosa-app-31830595ff5b.herokuapp.com/api/users/check-username/?username=${username.value}`);
+    const data = await res.json();
+    isUsernameAvailable.value = !data.username_exists;
+  } catch (e) {
+    console.log(e)
+    isUsernameAvailable.value = false;
+  }
+};
+
+const checkEmailAvailability = async () => {
+  if (!email.value) return;
+  try {
+    const res = await fetch(`https://prosa-app-31830595ff5b.herokuapp.com/api/users/check-email/?email=${email.value}`);
+    const data = await res.json();
+    isEmailAvailable.value = !data.email_exists;
+  } catch (e) {
+    console.log(e)
+    isEmailAvailable.value = false;
+  }
+};
 
 
 const register = async () => {
@@ -96,24 +126,18 @@ const submitForm = handleSubmit(register); // Aplica a validação antes de cham
       </div>
 
       <div class="input-field">
-        <input type="text" placeholder="email" v-model="email" />
+        <input type="text" placeholder="email" v-model="email"
+          @blur="() => { emailTouched = true; checkEmailAvailability(); }" />
         <span v-if="emailError" class="error">{{ emailError }}</span> <!-- Exibe erro se houver -->
-
+        <span v-else-if="emailTouched && !isEmailAvailable" class="error">Este email já está em uso</span>
       </div>
       <div class="input-field">
-        <input type="text" placeholder="usuário" v-model="username" />
+        <input type="text" placeholder="usuário" v-model="username"
+          @blur="() => { usernameTouched = true; checkUsernameAvailability(); }" />
         <span v-if="usernameError" class="error">{{ usernameError }}</span> <!-- Exibe erro se houver -->
+        <span v-else-if="usernameTouched && !isUsernameAvailable" class="error">Este nome de usuário já está em
+          uso</span> <!-- ✅ novo -->
       </div>
-
-      <!-- <div class="input-field">
-        <input type="password" placeholder="senha" v-model="password" />
-        <span v-if="passwordError" class="error">{{ passwordError }}</span>
-      </div>
-
-      <div class="input-field">
-        <input type="password" placeholder="confirme a senha" v-model="confirmPassword" />
-        <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span>
-      </div> -->
 
       <div class="input-field password">
         <input :type="showPassword ? 'text' : 'password'" placeholder="senha" v-model="password" />
@@ -135,7 +159,9 @@ const submitForm = handleSubmit(register); // Aplica a validação antes de cham
       </div>
 
 
-      <button type="submit">Registrar</button>
+      <button type="submit" :disabled="!meta.valid || !isUsernameAvailable || !isEmailAvailable">
+        Registrar
+      </button>
       <h4>Já é cadastrado? <a href="/login">Entre aqui</a></h4>
 
 
@@ -245,6 +271,11 @@ button {
 
 button:hover {
   background-color: var(--capivara);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 form {
