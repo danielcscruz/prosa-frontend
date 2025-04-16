@@ -77,7 +77,7 @@ const toggleMenu = () => {
 </template>
 
 <style scoped>
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1020px) {
   nav {
     display: none;
   }
@@ -103,7 +103,7 @@ const toggleMenu = () => {
   display: none;
   opacity: 0.8;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     display: flex;
     position: absolute;
     top: 20px;
@@ -126,7 +126,7 @@ const toggleMenu = () => {
   height: 200px;
   width: 200px;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     height: 150px;
     width: 150px;
 
@@ -194,15 +194,8 @@ const toggleMenu = () => {
 }
 
 .avatar-wrapper {
-  /* margin: 8px 16px;
+  margin: 8px 16px;
 
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center; */
 }
 
 .avatar-mainbar {
@@ -221,7 +214,7 @@ const toggleMenu = () => {
   align-items: center;
   height: 100vh;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     display: flex;
     flex-direction: row;
     height: 100px;
@@ -284,7 +277,7 @@ button {
   margin-top: 40px;
   color: var(--light-cream);
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     display: none;
   }
 }

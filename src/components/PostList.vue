@@ -193,65 +193,74 @@ const deletePost = async (postId: number) => {
 </script>
 
 <template>
-  <div v-if="isLoading" class="loading-wrapper">
-    <img :src="loader" alt="Carregando..." class="loading-img" />
-  </div>
-  <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
-  <div v-else-if="posts.length === 0 && !isLoading" class="no-posts">
-    <img src="../assets/sleep3.png" class="no-posts-img" alt="capivara dormindo" />
-    <span>Ainda não tem nenhuma postagem por aqui....</span>
-  </div>
-  <ul v-else-if="!isLoading">
-    <li v-for="post in posts" :key="post.id">
-      <div class="card">
-        <div class="avatar-section">
-          <img :src="post.user_avatar" class="avatar-img" alt="avatar" />
-        </div>
-        <div class="content">
-          <RouterLink :to="`/profile/${post.username}`" class="title">
-            <h3>{{ post.name }}</h3>
-            <h4>@{{ post.username }}</h4>
-          </RouterLink>
-
-          <!-- Verifica se é repost e exibe o conteúdo adequado -->
-          <div class="post">
-            <div v-if="post.repost">
-              <div class="repost">
-                <img :src="repostGreen" class="repost-icon" />
-                <span class="repost-info">Repostado de @{{ post.repost.username }}</span>
-              </div>
-              <p>{{ post.repost.content }}</p>
-            </div>
-            <div v-else>
-              {{ post.content }}
-            </div>
+  <div class="container">
+    <div v-if="isLoading" class="loading-wrapper">
+      <img :src="loader" alt="Carregando..." class="loading-img" />
+    </div>
+    <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
+    <div v-else-if="posts.length === 0 && !isLoading" class="no-posts">
+      <img src="../assets/sleep3.png" class="no-posts-img" alt="capivara dormindo" />
+      <span>Ainda não tem nenhuma postagem por aqui....</span>
+    </div>
+    <ul v-else-if="!isLoading" class="posts-list">
+      <li v-for="post in posts" :key="post.id">
+        <div class="card">
+          <div class="avatar-section">
+            <img :src="post.user_avatar" class="avatar-img" alt="avatar" />
           </div>
+          <div class="content">
+            <RouterLink :to="`/profile/${post.username}`" class="title">
+              <h3>{{ post.name }}</h3>
+              <h4>@{{ post.username }}</h4>
+            </RouterLink>
 
-          <small>{{ post.created_at }}</small>
+            <!-- Verifica se é repost e exibe o conteúdo adequado -->
+            <div class="post">
+              <div v-if="post.repost">
+                <div class="repost">
+                  <img :src="repostGreen" class="repost-icon" />
+                  <span class="repost-info">Repostado de @{{ post.repost.username }}</span>
+                </div>
+                <p>{{ post.repost.content }}</p>
+              </div>
+              <div v-else>
+                {{ post.content }}
+              </div>
+            </div>
 
-          <div class="actions">
-            <div class="icon-set" @click="toggleLike(post)">
-              <img class="icon-post" alt="like" :src="post.is_liked ? heartFilled : heartGreen" />
-            </div>
-            <div class="icon-set" @click="toggleBookmark(post)">
-              <img class="icon-post" alt="bookmark" :src="post.is_bookmarked ? bookmarkFilled : bookmarkGreen" />
-            </div>
-            <div class=" icon-set" @click="toggleRepost(post)">
-              <img class="icon-post repost" alt="repost" :src="post.is_reposted ? respostFilled : repostGreen" />
-            </div>
-            <div class=" icon-set" v-if="post.username === authStore.user?.username" @click="deletePost(post.id)">
+            <small>{{ post.created_at }}</small>
+            <div class="icon-set-trash" v-if="post.username === authStore.user?.username" @click="deletePost(post.id)">
               <img class="icon-post" alt="delete" :src="trash" />
             </div>
+
+            <div class="actions">
+              <div class="icon-set" @click="toggleLike(post)">
+                <img class="icon-post" alt="like" :src="post.is_liked ? heartFilled : heartGreen" />
+              </div>
+              <div class="icon-set" @click="toggleBookmark(post)">
+                <img class="icon-post" alt="bookmark" :src="post.is_bookmarked ? bookmarkFilled : bookmarkGreen" />
+              </div>
+              <div class=" icon-set" @click="toggleRepost(post)">
+                <img class="icon-post repost" alt="repost" :src="post.is_reposted ? respostFilled : repostGreen" />
+              </div>
+
+            </div>
           </div>
         </div>
-      </div>
-    </li>
-  </ul>
-  <div ref="sentinel" v-show="nextPageUrl"></div>
+      </li>
+    </ul>
+    <div ref="sentinel" v-show="nextPageUrl"></div>
+  </div>
 
 </template>
 
 <style scoped>
+.posts-list {
+  padding-top: 8px;
+  overflow-x: hidden;
+
+}
+
 /* Adicionando estilo para repost */
 .repost-info {
   font-size: 12px;
@@ -302,11 +311,14 @@ const deletePost = async (postId: number) => {
 }
 
 .card {
+  width: 100%;
   margin-top: 8px;
   border-bottom: 1px solid var(--beige-background);
   padding-bottom: 8px;
   padding-right: 8px;
   display: flex;
+  /* ADICIONE ISSO */
+
 }
 
 small {
@@ -324,6 +336,12 @@ ul {
   width: 70px;
   object-fit: cover;
   border-radius: 50%;
+
+  @media screen and (max-width:900px) {
+    height: 40px;
+    width: 40px;
+
+  }
 }
 
 .title {
@@ -346,20 +364,26 @@ ul {
 }
 
 .content {
+  width: 0;
+  flex: 1 1 0%;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  position: relative;
 }
 
 .post {
   padding-bottom: 8px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .actions {
+  width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  padding-top: 8px;
-  gap: 16px;
+  padding: 4px 20px;
 }
 
 .icon-set {
@@ -368,10 +392,17 @@ ul {
   gap: 0px;
 }
 
+.icon-set-trash {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+}
+
 .icon-post {
   height: 15px;
   width: 15px;
-  margin-right: 80px;
+  margin-right: 8px;
   cursor: pointer;
   transition: transform 0.1s ease-in-out;
 }

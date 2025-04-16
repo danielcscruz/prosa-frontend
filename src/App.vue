@@ -26,7 +26,7 @@ body {
 .border {
   border-right: 1px solid var(--beige-background);
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     border-right: none;
     border-bottom: 1px solid var(--beige-background);
     display: flex;
@@ -46,7 +46,7 @@ body {
 }
 
 .feat {
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -66,7 +66,7 @@ body {
   justify-content: center;
   align-items: center;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1020px) {
     position: relative;
     flex-direction: column;
     top: auto;

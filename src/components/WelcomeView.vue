@@ -8,8 +8,8 @@ import { RouterLink } from 'vue-router'
     <div class="container">
       <img alt="capivara logo" src="@/assets/welcome.png" class="welcome-img" />
       <h2>Bem-vindo ao <b>Prosa</b>!</h2>
-      <p>Uma rede de microblog feita pra você prosear à vontade, </p>
-      <p> com leveza e respeito.</p>
+      <p class="texto">Uma rede de microblog feita pra você prosear à vontade,
+        com leveza e respeito.</p>
     </div>
     <div class="container">
 
@@ -23,6 +23,16 @@ import { RouterLink } from 'vue-router'
 </template>
 
 <style scoped>
+.texto {
+  text-align: center;
+  margin: 0 50px;
+}
+
+h2 {
+  text-align: center;
+  margin: 0 50px;
+}
+
 .welcome-img {
   height: 300px;
   width: 300px;

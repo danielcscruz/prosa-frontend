@@ -14,10 +14,10 @@ const router = useRouter();
 
 // Definir o esquema de validação com yup
 const schema = yup.object({
-  first_name: yup.string().required('O nome é obrigatório'), // Validação para o campo 'first_name'
-  last_name: yup.string().required('O sobrenome é obrigatório'), // Validação para o campo 'last_name'
-  username: yup.string().required('O nome de usuário é obrigatório'), // Validação para o campo 'username'
-  email: yup.string().email('E-mail inválido').required('O e-mail é obrigatório'), // Validação para o campo 'email'
+  first_name: yup.string().required('obrigatório'), // Validação para o campo 'first_name'
+  last_name: yup.string().required('obrigatório'), // Validação para o campo 'last_name'
+  username: yup.string().required('obrigatório'), // Validação para o campo 'username'
+  email: yup.string().email('E-mail inválido').required('obrigatório'), // Validação para o campo 'email'
   password: yup.string().min(8, 'A senha deve ter pelo menos 8 caracteres').required('A senha é obrigatória'), // Validação para o campo 'password'
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'As senhas não coincidem') // Validação para garantir que a senha e a confirmação sejam iguais
@@ -103,7 +103,6 @@ const submitForm = handleSubmit(register); // Aplica a validação antes de cham
       <div class="input-field">
         <input type="text" placeholder="usuário" v-model="username" />
         <span v-if="usernameError" class="error">{{ usernameError }}</span> <!-- Exibe erro se houver -->
-
       </div>
       <div class="input-field">
         <input type="password" placeholder="senha" v-model="password" />

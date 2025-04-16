@@ -9,6 +9,8 @@ import userTrust from '@/assets/user-trust.png'
 import userPen from '@/assets/user-pen.png'
 import xMark from '@/assets/xmark.png'
 
+// import avatarLoading from '@/assets/avatar-loading.gif'
+
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -144,12 +146,13 @@ const handleAvatarUpload = (event: Event) => {
   }
 }
 
-
 const first_name = computed(() => userData.value.first_name || 'Nome')
 const last_name = computed(() => userData.value.last_name || 'Nome')
 const avatar = computed(() => userData.value.avatar || '/default-avatar.png')
 const followers_count = computed(() => userData.value.followers_count || 0)
 const following_count = computed(() => userData.value.following_count || 0)
+
+
 </script>
 
 <template>
@@ -174,22 +177,24 @@ const following_count = computed(() => userData.value.following_count || 0)
               <h4>seguidores</h4>
             </div>
           </div>
-          <div>
+          <div class="icons-group">
             <!-- Botão de editar perfil, altera o ícone quando em modo de edição -->
             <div v-if="userData.is_me" class="hide-group">
               <img @click="toggleEditProfile" class="icon-action" alt="Editar" :src="isEditing ? xMark : userPen" />
               <div class="hide-text">
-              </div>
 
+              </div>
             </div>
             <div v-else-if="!userData.is_following" class="hide-group">
               <img :src="userAdd" @click="toggleFollow" class="icon-action" alt="Seguir" />
               <div class="hide-text">
+
               </div>
             </div>
             <div v-else @click="toggleFollow" class="hide-group">
               <img :src="userTrust" class="icon-action" alt="Deixar de seguir" />
               <div class="hide-text">
+
               </div>
 
             </div>
@@ -239,9 +244,13 @@ const following_count = computed(() => userData.value.following_count || 0)
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 1px;
-  right: 1px;
+  justify-items: center;
+  text-align: center;
+  width: 100%;
+  gap: 4px;
+  font-size: 10px;
+  margin: 0 auto;
+
 }
 
 .hide-group h4 {
@@ -343,8 +352,8 @@ input {
 }
 
 .icon-action {
-  height: 20px;
-  width: 20px;
+  height: 15px;
+  width: 15px;
   transition: transform 0.1s ease-in-out;
   cursor: pointer;
 }
@@ -371,18 +380,13 @@ input {
 .card {
   align-items: center;
   display: flex;
-  gap: 20px;
-  line-height: 20px;
+  gap: 10px;
+  line-height: 18px;
   width: 100%;
   position: relative;
 }
 
-.details {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
-}
+
 
 .stats {
   display: flex;
@@ -399,6 +403,24 @@ input {
   object-fit: cover;
   border-radius: 50%;
   border: none;
+
+  @media screen and (max-width:900px) {
+    height: 70px;
+    width: 70px;
+  }
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+
+  @media screen and (max-width:600px) {
+    flex-direction: column;
+    gap: 20px;
+
+  }
 }
 
 h4 {
