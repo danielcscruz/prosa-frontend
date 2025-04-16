@@ -113,6 +113,8 @@ span.maxed-out {
 }
 
 .post-area {
+  display: flex;
+  flex-direction: column;
   margin-top: 8px;
   border: 1px solid var(--beige-background);
   background-color: var(--light-cream);
@@ -147,19 +149,20 @@ button:hover {
   background-color: var(--capivara);
 }
 
-
-
 textarea {
   background-color: transparent;
   padding: 4px;
   border: none;
   height: 100%;
-  width: 80%;
+  width: 100%;
   font-size: 16px;
   font-weight: 200;
   resize: none;
   align-items: center;
   outline: none;
+  padding-right: 120px;
+
+
 
 }
 
