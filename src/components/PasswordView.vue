@@ -7,6 +7,8 @@ const error = ref(false)
 
 const requestNewPassword = async () => {
   try {
+    console.log('Email enviado:', email.value)
+
     const response = await fetch('https://prosa-app-31830595ff5b.herokuapp.com/forgot-password/', {
       method: 'POST',
       headers: {
@@ -21,7 +23,7 @@ const requestNewPassword = async () => {
       message.value = data.message || 'Nova senha enviada para seu e-mail.'
       error.value = false
     } else {
-      message.value = data.error || 'Erro ao enviar nova senha. Verifique o e-mail informado.'
+      message.value = data.error || 'Erro ao enviar a nova senha. Entre em contato com o administrador dos ite.'
       error.value = true
     }
   } catch (err) {
@@ -38,7 +40,7 @@ const requestNewPassword = async () => {
     <h2> Entrar no Prosa</h2>
     <form @submit.prevent="requestNewPassword">
       <div class="input-field">
-        <input type="text" placeholder="email" />
+        <input type="text" placeholder="email" v-model="email" />
       </div>
 
       <button type="submit">Enviar</button>

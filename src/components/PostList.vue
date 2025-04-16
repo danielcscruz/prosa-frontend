@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import api from '../services/api.js'
 import { useRoute } from 'vue-router'
@@ -14,6 +18,19 @@ import respostFilled from '@/assets/refresh-filled.png'
 import trash from '@/assets/trash.png'
 
 
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+// Exemplo: convertendo uma data vinda do backend
+// function formatToBrasilia(
+//   rawDate: string,
+//   inputFormat = 'DD/MM/YY - HH:mm',
+//   outputFormat = 'DD/MM/YYYY HH:mm'): string {
+//   const parsed = dayjs(rawDate, inputFormat)
+//   if (!parsed.isValid()) return 'Data inválida'
+
+//   return parsed.tz('America/Sao_Paulo').format(outputFormat)
+// }
 
 
 const isLoading = ref(true)
@@ -228,7 +245,10 @@ const deletePost = async (postId: number) => {
               </div>
             </div>
 
-            <small>{{ post.created_at }}</small>
+            <!-- <small>{{ formatToBrasilia(post.created_at) }}</small> -->
+            <small>{{ post.created_at }} (UTC)</small>
+
+
             <div class="icon-set-trash" v-if="post.username === authStore.user?.username" @click="deletePost(post.id)">
               <img class="icon-post" alt="delete" :src="trash" />
             </div>
