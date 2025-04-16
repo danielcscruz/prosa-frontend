@@ -60,12 +60,13 @@ h2 {
   align-items: center;
   justify-content: center;
 
-  @media screen and (max-width: 900px) {
 
-    height: 100%;
+  @media screen and (max-width: 900px) {
+    height: 200vh;
     width: 100%;
     align-items: center;
     justify-content: center;
+    padding-bottom: 20px;
   }
 
 

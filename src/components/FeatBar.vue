@@ -117,13 +117,20 @@ const truncatedContent = (content: string) => {
 }
 
 .card-post-list {
-  padding-left: 4px;
+  padding: 6px 6px;
   border-radius: 8px;
+  gap: 4px;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
+}
+
+.card-post-list h3 {
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 800;
 }
 
 .details {
@@ -216,10 +223,7 @@ const truncatedContent = (content: string) => {
 }
 
 
-.card-post-list h3 {
-  font-size: 18px;
-  font-weight: 800;
-}
+
 
 
 

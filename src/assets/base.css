@@ -57,6 +57,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  @media screen and (max-height: 770px) {
+    background-color: var(--beige-container);
+  }
+
+  @media screen and (max-width: 900px) {
+    background-color: var(--beige-container);
+  }
   @media screen and (max-width: var( --breakpoint-tablet)) {
     background-color: var(--beige-container);
   }

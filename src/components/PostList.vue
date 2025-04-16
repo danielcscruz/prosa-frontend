@@ -255,7 +255,12 @@ const deletePost = async (postId: number) => {
 </template>
 
 <style scoped>
+.container {
+  height: 100%;
+}
+
 .posts-list {
+  height: auto;
   padding-top: 8px;
   overflow-x: hidden;
 
