@@ -1,8 +1,14 @@
 <script setup lang="ts">
 // import loader2 from "../assets/loader2.gif"
 import { ref } from 'vue';
+import { Eye, EyeOff } from 'lucide-vue-next';
+
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+
+
+const showPassword = ref(false);
+
 
 
 const username = ref('');
@@ -33,9 +39,16 @@ const login = async () => {
       <div class="input-field">
         <input v-model="username" type="text" placeholder="usuário" />
       </div>
-      <div class="input-field">
-        <input v-model="password" type="password" placeholder="senha" />
+
+      <div class="input-field password">
+        <input :type="showPassword ? 'text' : 'password'" placeholder="senha" v-model="password" />
+        <span @click="showPassword = !showPassword" class="toggle-icon">
+          <Eye v-if="!showPassword" />
+          <EyeOff v-else />
+        </span>
       </div>
+
+
       <h5><a href="/password"> Esqueci minha senha</a></h5>
 
       <button type="submit">Entrar</button>
@@ -46,6 +59,20 @@ const login = async () => {
 </template>
 
 <style scoped>
+.input-field.password {
+  position: relative;
+}
+
+.toggle-icon {
+  opacity: 0.8;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--green-moss);
+}
+
 .error-message {
   color: red;
   font-size: 14px;

@@ -1,15 +1,14 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { Eye, EyeOff } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 import { useForm, useField } from 'vee-validate'; // Importação de funções necessárias para validação
 import * as yup from 'yup'; // Importação de yup para schema de validação
 
 
-// const first_name = ref("");
-// const last_name = ref("");
-// const username = ref("");
-// const email = ref("");
-// const password = ref("");
-// const confirmPassword = ref("");
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
 const router = useRouter();
 
 // Definir o esquema de validação com yup
@@ -29,12 +28,13 @@ const { handleSubmit } = useForm({
 });
 
 // Usar `useField` para cada campo do formulário, vinculando a validação
-const { value: first_name, errorMessage: firstNameError } = useField('first_name'); // Primeiro nome
-const { value: last_name, errorMessage: lastNameError } = useField('last_name'); // Sobrenome
-const { value: username, errorMessage: usernameError } = useField('username'); // Nome de usuário
-const { value: email, errorMessage: emailError } = useField('email'); // E-mail
-const { value: password, errorMessage: passwordError } = useField('password'); // Senha
-const { value: confirmPassword, errorMessage: confirmPasswordError } = useField('confirmPassword'); // Confirmação de senha
+const { value: username, errorMessage: usernameError } = useField<string>('username');
+const { value: email, errorMessage: emailError } = useField<string>('email');
+const { value: first_name, errorMessage: firstNameError } = useField<string>('first_name');
+const { value: last_name, errorMessage: lastNameError } = useField<string>('last_name');
+const { value: password, errorMessage: passwordError } = useField<string>('password');
+const { value: confirmPassword, errorMessage: confirmPasswordError } = useField<string>('confirmPassword');
+
 
 
 
@@ -53,8 +53,8 @@ const register = async () => {
       body: JSON.stringify({
         first_name: first_name.value,
         last_name: last_name.value,
-        username: username.value,
-        email: email.value,
+        username: username.value.toLowerCase(),
+        email: email.value.toLowerCase(),
         password: password.value,
       }),
     });
@@ -104,16 +104,37 @@ const submitForm = handleSubmit(register); // Aplica a validação antes de cham
         <input type="text" placeholder="usuário" v-model="username" />
         <span v-if="usernameError" class="error">{{ usernameError }}</span> <!-- Exibe erro se houver -->
       </div>
-      <div class="input-field">
-        <input type="password" placeholder="senha" v-model="password" />
-        <span v-if="passwordError" class="error">{{ passwordError }}</span> <!-- Exibe erro se houver -->
 
+      <!-- <div class="input-field">
+        <input type="password" placeholder="senha" v-model="password" />
+        <span v-if="passwordError" class="error">{{ passwordError }}</span>
       </div>
+
       <div class="input-field">
         <input type="password" placeholder="confirme a senha" v-model="confirmPassword" />
-        <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span> <!-- Exibe erro se houver -->
+        <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span>
+      </div> -->
 
+      <div class="input-field password">
+        <input :type="showPassword ? 'text' : 'password'" placeholder="senha" v-model="password" />
+        <span @click="showPassword = !showPassword" class="toggle-icon">
+          <Eye v-if="!showPassword" />
+          <EyeOff v-else />
+        </span>
+        <span v-if="passwordError" class="error">{{ passwordError }}</span>
       </div>
+
+      <div class="input-field password">
+        <input :type="showConfirmPassword ? 'text' : 'password'" placeholder="confirme a senha"
+          v-model="confirmPassword" />
+        <span @click="showConfirmPassword = !showConfirmPassword" class="toggle-icon">
+          <Eye v-if="!showConfirmPassword" />
+          <EyeOff v-else />
+        </span>
+        <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span>
+      </div>
+
+
       <button type="submit">Registrar</button>
       <h4>Já é cadastrado? <a href="/login">Entre aqui</a></h4>
 
@@ -124,6 +145,20 @@ const submitForm = handleSubmit(register); // Aplica a validação antes de cham
 </template>
 
 <style scoped>
+.input-field.password {
+  position: relative;
+}
+
+.toggle-icon {
+  opacity: 0.8;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--green-moss);
+}
+
 .error {
   color: var(--error-red);
   font-size: 12px;
