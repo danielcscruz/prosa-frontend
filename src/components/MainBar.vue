@@ -194,7 +194,7 @@ const toggleMenu = () => {
 }
 
 .avatar-wrapper {
-  margin: 8px 16px;
+  /* margin: 8px 16px;
 
   height: 60px;
   width: 60px;
@@ -202,10 +202,12 @@ const toggleMenu = () => {
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .avatar-mainbar {
+  border-radius: 50%;
+
   height: 60px;
   width: 60px;
   object-position: center;

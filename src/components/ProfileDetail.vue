@@ -222,6 +222,10 @@ const following_count = computed(() => userData.value.following_count || 0)
 </template>
 
 <style scoped>
+.container-post {
+  width: 100%;
+}
+
 .hidden-input {
   display: none;
 }
@@ -235,6 +239,9 @@ const following_count = computed(() => userData.value.following_count || 0)
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 1px;
+  right: 1px;
 }
 
 .hide-group h4 {
@@ -336,8 +343,8 @@ input {
 }
 
 .icon-action {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   transition: transform 0.1s ease-in-out;
   cursor: pointer;
 }
@@ -352,7 +359,7 @@ input {
   border-bottom-right-radius: 16px;
   display: flex;
   flex-direction: column;
-  padding: 20px 8px;
+  padding: 20px 40px;
   transition: all 0.3s ease;
 }
 
@@ -367,6 +374,7 @@ input {
   gap: 20px;
   line-height: 20px;
   width: 100%;
+  position: relative;
 }
 
 .details {
@@ -384,11 +392,13 @@ input {
   text-align: center;
 }
 
+
 .avatar-image {
   height: 100px;
   width: 100px;
   object-fit: cover;
   border-radius: 50%;
+  border: none;
 }
 
 h4 {

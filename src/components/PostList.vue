@@ -199,7 +199,7 @@ const deletePost = async (postId: number) => {
   <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
   <div v-else-if="posts.length === 0 && !isLoading" class="no-posts">
     <img src="../assets/sleep3.png" class="no-posts-img" alt="capivara dormindo" />
-    <span>O usuário ainda não realizou nenhuma postagem</span>
+    <span>Ainda não tem nenhuma postagem por aqui....</span>
   </div>
   <ul v-else-if="!isLoading">
     <li v-for="post in posts" :key="post.id">
