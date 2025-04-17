@@ -65,12 +65,7 @@ const saveProfileChanges = async () => {
   }
 }
 
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  avatar: string;
-}
+
 
 // Variáveis reativas para armazenar as informações do usuário
 const userData = ref({
@@ -110,8 +105,8 @@ watch(
 )
 
 const toggleFollow = async () => {
-  const userResponse = await api.get(`/api/users/?username=${username.value}`)
-  const user = userResponse.data.results.find((u: User) => u.username === username.value)
+  const userResponse = await api.get(`/api/users/profile/${username.value}`)
+  const user = userResponse.data
 
   if (!user) {
     console.error('Usuário não encontrado com esse username.')
