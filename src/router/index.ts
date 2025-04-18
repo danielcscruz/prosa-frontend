@@ -7,6 +7,7 @@ import PasswordView from '@/components/PasswordView.vue'
 import ExploreView from '@/components/ExploreView.vue'
 import BookmarkView from '@/components/BookmarkView.vue'
 import WelcomeView from '@/components/WelcomeView.vue'
+import NotificationView from '@/components/NotificationView.vue'
 
 import { useAuthStore } from '../stores/auth'
 
@@ -14,7 +15,11 @@ const routes = [
   { path: '/', name: 'dashboard', component: DashboardView },
   // { path: '/profile', name: 'profile', component: ProfileView },
   { path: '/profile/:username/:postId?', name: 'profile', component: ProfileView },
+  { path: '/profile/:username/:postId?/followers', name: 'followers', component: ProfileView },
+  { path: '/profile/:username/:postId?/following', name: 'following', component: ProfileView },
+
   { path: '/explore', name: 'explore', component: ExploreView },
+  { path: '/notification', name: 'notification', component: NotificationView },
   { path: '/bookmark', name: 'bookmark', component: BookmarkView },
   { path: '/welcome', name: 'welcome', component: WelcomeView },
 

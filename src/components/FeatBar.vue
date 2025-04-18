@@ -177,8 +177,6 @@ const truncatedContent = (content: string) => {
   gap: 4px;
 }
 
-
-
 .user-group h4 {
   font-size: 12px;
 }

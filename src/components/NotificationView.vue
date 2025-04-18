@@ -1,11 +1,10 @@
 <script setup lang="ts">
 
-import ProfileDetail from './ProfileDetail.vue';
-
+import NotificationBar from './NotificationBar.vue';
 </script>
 
 <template>
-  <ProfileDetail class="f-2" />
+  <NotificationBar class="f-2 " />
 </template>
 
 <style scoped>
@@ -14,6 +13,5 @@ import ProfileDetail from './ProfileDetail.vue';
   height: 100%;
   width: 100%;
   /* Takes 2 out of 4 columns */
-
 }
 </style>

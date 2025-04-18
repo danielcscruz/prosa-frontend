@@ -39,6 +39,12 @@ const toggleMenu = () => {
           exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/home.png" />
           Início
         </RouterLink>
+        <!-- <RouterLink @click="showMenu = false" to="/notification" class="nav-group alert-parent"
+          active-class="active-nav" exact-active-class="exact-nav"> <img alt="Home" class="icon"
+            src="@/assets/bell.png" />
+          Notificações
+          <div class="red-alert"><span></span></div>
+        </RouterLink> -->
         <RouterLink @click="showMenu = false" to="/explore" class="nav-group" active-class="active-nav"
           exact-active-class="exact-nav"> <img alt="Home" class="icon" src="@/assets/globe.png" />
           Explorar
@@ -66,17 +72,28 @@ const toggleMenu = () => {
           </div>
         </div>
       </nav>
-
-
-
     </div>
     <p>
-
     </p>
   </div>
 </template>
 
 <style scoped>
+.alert-parent {
+  position: relative;
+}
+
+.red-alert {
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--error-red);
+  top: 12px;
+  left: 16px;
+}
+
 @media screen and (max-width: 1020px) {
   nav {
     display: none;

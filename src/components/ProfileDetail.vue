@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/auth.js'
 import { useRoute } from 'vue-router'
 import api from '../services/api.js'
 import PostList from './PostList.vue'
+import FollowList from './FollowList.vue'
 import userAdd from '@/assets/user-add.png'
 import userTrust from '@/assets/user-trust.png'
 import userPen from '@/assets/user-pen.png'
@@ -164,36 +165,38 @@ const following_count = computed(() => userData.value.following_count || 0)
           </div>
           <div class="stats">
             <div>
-              <h2>{{ following_count }}</h2>
-              <h4>seguindo</h4>
+              <RouterLink :to="'/profile/' + username + '/following/'" class="follow-link">
+
+                <h2>{{ following_count }}</h2>
+                <h4>seguindo</h4>
+              </RouterLink>
+
             </div>
             <div>
-              <h2>{{ followers_count }}</h2>
-              <h4>seguidores</h4>
+              <RouterLink :to="'/profile/' + username + '/followers/'" class="follow-link">
+                <h2>{{ followers_count }}</h2>
+                <h4>seguidores</h4>
+              </RouterLink>
+
             </div>
           </div>
-          <div class="icons-group">
+          <div class=" icons-group">
             <!-- Botão de editar perfil, altera o ícone quando em modo de edição -->
             <div v-if="userData.is_me" class="hide-group">
               <img @click="toggleEditProfile" class="icon-action" alt="Editar" :src="isEditing ? xMark : userPen" />
               <div class="hide-text">
-
               </div>
             </div>
             <div v-else-if="!userData.is_following" class="hide-group">
               <img :src="userAdd" @click="toggleFollow" class="icon-action" alt="Seguir" />
               <div class="hide-text">
-
               </div>
             </div>
             <div v-else @click="toggleFollow" class="hide-group">
               <img :src="userTrust" class="icon-action" alt="Deixar de seguir" />
               <div class="hide-text">
-
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
@@ -216,12 +219,21 @@ const following_count = computed(() => userData.value.following_count || 0)
       </div>
     </div>
     <div>
-      <PostList v-if="!isEditing" />
+      <PostList v-if="!isEditing && route.name === 'profile'" />
+      <FollowList v-if="!isEditing && (route.name === 'followers' || route.name === 'following')" />
+
+
     </div>
   </div>
 </template>
 
 <style scoped>
+.follow-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 .container-post {
   width: 100%;
 }

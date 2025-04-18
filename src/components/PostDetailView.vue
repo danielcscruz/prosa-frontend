@@ -114,8 +114,6 @@ const following_count = computed(() => userData.value.following_count || 0)
               class="icon-action" alt="Seguir" />
             <img src="../assets/user-trust.png" v-else @click="toggleFollow" class="icon-action"
               alt="Deixar de seguir" />
-
-
           </div>
         </div>
       </div>
